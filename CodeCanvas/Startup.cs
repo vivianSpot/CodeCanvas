@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using System.IO;
@@ -13,8 +15,8 @@ namespace CodeCanvas
 			_config = config;
 
 			Log.Logger = new LoggerConfiguration()
-										.WriteTo.Map("Date", "Other", (date, wt) => wt.File($"./logs/log_{date}.txt"))
-										.CreateLogger();
+				.ReadFrom.Configuration(config)
+				.CreateLogger();
 		}
 	}
 }

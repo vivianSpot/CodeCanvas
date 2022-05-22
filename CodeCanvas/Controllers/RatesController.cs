@@ -3,7 +3,6 @@ using CodeCanvas.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using System;
 using System.Linq;
 
@@ -38,8 +37,12 @@ namespace CodeCanvas.Controllers
 				return NotFound();
 
 			// log each request along with its corresponding response
-			Log.Information("Request Body {Date}!", date);
-			Log.Information($"Response Body: {rates}");
+			_logger.LogInformation($"Request date: {date}");
+			_logger.LogInformation($"Response body: ");
+			foreach (var rate in rates)
+			{
+				_logger.LogInformation(rate.ToString());
+			}
 
 			return Ok(rates);
 		}

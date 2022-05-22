@@ -16,5 +16,10 @@ namespace CodeCanvas.Models
 			Rate = rate;
 			CreatedAt = createdAt;
 		}
-	}
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Currency Code: {CurrencyCode}, Rate: {Rate}";
+        }
+    }
 }

@@ -22,6 +22,11 @@ namespace CodeCanvas.Repositories
             return _applicationDbContext.CurrencyRates.Where(x => x.CreatedAt.Date == date.Date);
         }
 
+        public void InsertCurrencyRate(CurrencyRateEntity currencyRate)
+        {
+            _applicationDbContext.CurrencyRates.Add(currencyRate);
+        }
+
         public async Task<bool> SaveAllAsync()
         {
             return await _applicationDbContext.SaveChangesAsync() > 0;
