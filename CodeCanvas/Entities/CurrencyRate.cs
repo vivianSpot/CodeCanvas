@@ -11,11 +11,11 @@ namespace CodeCanvas.Entities
 		/// <summary>
 		/// ISO code of the currency
 		/// </summary>
-		public string CurrencyCode { get; }
+		public string CurrencyCode { get; set; }
 		/// <summary>
 		/// currency rate related to EUR
 		/// </summary>
-		public decimal Rate { get; private set; }
+		public decimal Rate { get; set; }
 		/// <summary>
 		/// creation date of the Currency
 		/// </summary>
@@ -24,6 +24,12 @@ namespace CodeCanvas.Entities
 		/// date of the last update of the Currency
 		/// </summary>
 		public DateTime UpdatedAt { get; private set; }
+
+		public CurrencyRateEntity(string currencyCode, decimal rate, DateTime createdAt) {
+			CurrencyCode = currencyCode;
+			Rate = rate;
+			CreatedAt = createdAt;
+		}
 
 		public CurrencyRateEntity(int id, string currencyCode, decimal rate, DateTime createdAt, DateTime updatedAt)
 		{

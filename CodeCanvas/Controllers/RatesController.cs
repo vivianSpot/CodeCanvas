@@ -1,39 +1,47 @@
-﻿using System;
-using CodeCanvas.Models;
-using EuropeanCentralBank;
+﻿using CodeCanvas.Models;
+using CodeCanvas.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using System;
+using System.Linq;
 
 namespace CodeCanvas.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("api/[controller]")]
 	public class RatesController : ControllerBase
 	{
-		private readonly IEuropeanCentralBankClient _europeanCentralBankClient;
+		private readonly ICurrencyRateRepository _currencyRateRepository;
 		private readonly ILogger<RatesController> _logger;
 
-		public RatesController(IEuropeanCentralBankClient europeanCentralBankClient, ILogger<RatesController> logger)
+		public RatesController(ICurrencyRateRepository currencyRateRepository, ILogger<RatesController> logger)
 		{
-			_europeanCentralBankClient = europeanCentralBankClient;
+			_currencyRateRepository = currencyRateRepository;
 			_logger = logger;
 		}
 
 		[HttpGet]
 		[ProducesResponseType(typeof(CurrencyRateModel[]), StatusCodes.Status200OK)]
-		public async IActionResult GetRates([FromQuery] DateTime date)
+		public IActionResult GetRates([FromQuery] DateTime date)
 		{
-			// todo: implement RatesController.GetRates()
-
-			// get rates for the requested date, or 404 (not found) in case requested date is missing
-
-			// log each request along with its corresponding response
-
-			if(date == default(DateTime))
+			if(date == default)
 				throw new ArgumentNullException(nameof(date));
 
-			(await _europeanCentralBankClient.GetRates()).;
+			// get rates for the requested date
+			var rates = _currencyRateRepository.GetCurrencyRatesByDateAsync(date)
+				.Select(x => new CurrencyRateModel(x.Id, x.CurrencyCode, x.Rate, x.CreatedAt)).ToArray();
+
+			// or 404 (not found) in case requested date is missing
+			if (rates?.Any() != true)
+				return NotFound();
+
+			// log each request along with its corresponding response
+			Log.Information("Request Body {Date}!", date);
+			Log.Information($"Response Body: {rates}");
+
+			return Ok(rates);
 		}
 	}
 }

@@ -1,23 +1,20 @@
-using EuropeanCentralBank;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using System.IO;
 
 namespace CodeCanvas
 {
-	public partial class Startup
+    public partial class Startup
 	{
 		private readonly IConfiguration _config;
 
 		public Startup(IConfiguration config)
 		{
 			_config = config;
-		}
 
-		public void ConfigureServices(IServiceCollection services)
-		{
-			ServiceCollectionExtensions.AddEuropeanCentralBank(services, _config);
-
-			//services.AddHttpClient();
+			Log.Logger = new LoggerConfiguration()
+										.WriteTo.Map("Date", "Other", (date, wt) => wt.File($"./logs/log_{date}.txt"))
+										.CreateLogger();
 		}
 	}
 }

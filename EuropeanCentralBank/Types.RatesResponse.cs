@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EuropeanCentralBank
 {
-	public class RatesResponse
+    public class RatesResponse
 	{
 		public DateTime Date { get; }
 		public IReadOnlyCollection<CurrencyRate> Rates { get; }

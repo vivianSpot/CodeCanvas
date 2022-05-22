@@ -1,11 +1,13 @@
 using CodeCanvas.Database;
+using CodeCanvas.HostedServices;
+using CodeCanvas.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CodeCanvas
 {
-	public partial class Startup
+    public partial class Startup
 	{
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -20,8 +22,14 @@ namespace CodeCanvas
 				options.UseSqlite(connectionString);
 			});
 
-			// todo: register EuropeanCentralBankClient
-			// todo: register UpdateRatesHostedService
+			// register UpdateRatesHostedService
+			services.AddHostedService<UpdateRatesHostedService>();
+
+			// register EuropeanCentralBankClient
+			EuropeanCentralBank.ServiceCollectionExtensions.AddEuropeanCentralBank(services, _config);
+
+			services.AddHttpClient();
+			services.AddScoped<ICurrencyRateRepository, CurrencyRateRepository>();
 		}
 	}
 }

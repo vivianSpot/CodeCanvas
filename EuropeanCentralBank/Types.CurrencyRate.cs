@@ -1,6 +1,6 @@
 ﻿namespace EuropeanCentralBank
 {
-	public class CurrencyRate
+    public class CurrencyRate
 	{
 		public string CurrencyCode { get; }
 		public decimal Rate { get; }
