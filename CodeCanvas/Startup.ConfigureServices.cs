@@ -1,6 +1,7 @@
 using CodeCanvas.Database;
 using CodeCanvas.HostedServices;
 using CodeCanvas.Repositories;
+using CodeCanvas.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,8 @@ namespace CodeCanvas
 
 			services.AddHttpClient();
 			services.AddScoped<ICurrencyRateRepository, CurrencyRateRepository>();
+			services.AddScoped<IWalletRepository, WalletRepository>();
+			services.AddTransient<IWalletAdjustmentService, WalletAdjustmentService>();
 		}
 	}
 }

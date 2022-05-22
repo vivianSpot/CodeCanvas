@@ -53,7 +53,7 @@ namespace CodeCanvas.HostedServices
 				var _currencyRateRepository = scope.ServiceProvider.GetRequiredService<ICurrencyRateRepository>();
 
 				//we only update rates with latestRates's day and if the Rate has changed for a CurrencyCode
-				var persistedLatestDayRates = _currencyRateRepository.GetCurrencyRatesByDateAsync(latestRates.Date.Date);
+				var persistedLatestDayRates = _currencyRateRepository.GetAllByDate(latestRates.Date.Date);
 
 				var ratesToUpdate = persistedLatestDayRates.Where(x => latestRates.Rates.Any(r => r.CurrencyCode == x.CurrencyCode && r.Rate != x.Rate));
 

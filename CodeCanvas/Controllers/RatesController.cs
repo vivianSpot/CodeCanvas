@@ -29,19 +29,24 @@ namespace CodeCanvas.Controllers
 				throw new ArgumentNullException(nameof(date));
 
 			// get rates for the requested date
-			var rates = _currencyRateRepository.GetCurrencyRatesByDateAsync(date)
+			var rates = _currencyRateRepository.GetAllByDate(date)
 				.Select(x => new CurrencyRateModel(x.Id, x.CurrencyCode, x.Rate, x.CreatedAt)).ToArray();
-
-			// or 404 (not found) in case requested date is missing
-			if (rates?.Any() != true)
-				return NotFound();
 
 			// log each request along with its corresponding response
 			_logger.LogInformation($"Request date: {date}");
-			_logger.LogInformation($"Response body: ");
-			foreach (var rate in rates)
+
+			// or 404 (not found) in case requested date is missing
+			if (rates?.Any() != true)
 			{
-				_logger.LogInformation(rate.ToString());
+				_logger.LogInformation($"No rates found for {date}.");
+				return NotFound();
+			}
+			else
+			{
+				foreach (var rate in rates)
+				{
+					_logger.LogInformation(rate.ToString());
+				}
 			}
 
 			return Ok(rates);

@@ -17,7 +17,12 @@ namespace CodeCanvas.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public IEnumerable<CurrencyRateEntity> GetCurrencyRatesByDateAsync(DateTime date)
+        public async Task<CurrencyRateEntity> GetCurrencyRateByDateAndCurrencyCodeAsync(DateTime date, string currencyCode)
+        {
+            return await _applicationDbContext.CurrencyRates.SingleOrDefaultAsync(x => x.CreatedAt.Date == date.Date && x.CurrencyCode == currencyCode);
+        }
+
+        public IEnumerable<CurrencyRateEntity> GetAllByDate(DateTime date)
         {
             return _applicationDbContext.CurrencyRates.Where(x => x.CreatedAt.Date == date.Date);
         }

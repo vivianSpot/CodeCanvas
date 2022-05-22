@@ -1,25 +1,31 @@
-﻿using System;
+﻿using CodeCanvas.Entities;
+using CodeCanvas.Repositories;
+using System;
 using System.Threading.Tasks;
 
 namespace CodeCanvas.ExchangeRateStrategies
 {
-	abstract class ExchangeRateStrategyBase : IExchangeRateStrategy
+    public abstract class ExchangeRateStrategyBase : IExchangeRateStrategy
 	{
+		private readonly ICurrencyRateRepository _currencyRateRepository;
+
+		public ExchangeRateStrategyBase(ICurrencyRateRepository currencyRateRepository)
+		{ 
+			_currencyRateRepository = currencyRateRepository;
+		}
+
 		public async Task<decimal> Convert(decimal amount, string amountCurrencyCode, string currencyCodeToConvert, DateTime date)
 		{
 			var rate = await GetRate(amountCurrencyCode, currencyCodeToConvert, date);
 			return amount * rate;
 		}
 
+		protected async Task<CurrencyRateEntity> GetCurrencyRateEntry(DateTime date, string currencyCode)
+		{
+			return await _currencyRateRepository.GetCurrencyRateByDateAndCurrencyCodeAsync(date, currencyCode);
+		}
+
+		// created two derived classes from ExchangeRateStrategyBase and override GetRate()
 		protected abstract Task<decimal> GetRate(string currencyCodeFrom, string currencyCodeTo, DateTime date);
-
-		// todo: create two derived classes from ExchangeRateStrategyBase and override GetRate()
-
-		// 1) SpecificDateExchangeRateStrategy: should find the rate for the specified date,
-		//		or an exception must be thrown in case date is missing 
-
-		// 2) SpecificDateOrNextAvailableRateStrategy: should find the rate for the specified date,
-		//		or the rate of the next available date after the specified date,
-		//		again an exception must be thrown in case no available date found
 	}
 }

@@ -9,7 +9,8 @@ namespace CodeCanvas.Repositories
     {
         void Update(CurrencyRateEntity currencyRate);
         Task<bool> SaveAllAsync();
-        IEnumerable<CurrencyRateEntity> GetCurrencyRatesByDateAsync(DateTime date);
+        IEnumerable<CurrencyRateEntity> GetAllByDate(DateTime date);
+        Task<CurrencyRateEntity> GetCurrencyRateByDateAndCurrencyCodeAsync(DateTime date, string currencyCode);
         void InsertCurrencyRate(CurrencyRateEntity currencyRate);
     }
 }
