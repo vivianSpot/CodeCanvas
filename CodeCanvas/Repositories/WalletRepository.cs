@@ -16,7 +16,7 @@ namespace CodeCanvas.Repositories
 
         public async Task<WalletEntity> GetWalletByIdAsync(int id)
         {
-            return await _applicationDbContext.FindAsync<WalletEntity>(id);
+            return await _applicationDbContext.Wallets.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void InsertWallet(WalletEntity wallet)

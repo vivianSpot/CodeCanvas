@@ -45,9 +45,9 @@ namespace CodeCanvas.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(typeof(WalletEntity), StatusCodes.Status200OK)]
-		public IActionResult GetRates([FromQuery] int id)
+		public async Task<IActionResult> GetRates([FromQuery] int id)
 		{
-			var wallet = _walletAdjustmentService.GetWallet(id);
+			var wallet = await _walletAdjustmentService.GetWalletAsync(id);
 
 			if (wallet == null)
 				return NotFound();
@@ -56,10 +56,11 @@ namespace CodeCanvas.Controllers
 		}
 
 		[HttpPost]
-		[Route("/create")]
-		public IActionResult CreateWallet([FromBody] WalletEntity entity)
+		[Route("/api/Create")]
+		[ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+		public async Task<IActionResult> CreateWallet([FromBody] WalletEntity entity)
 		{
-			_walletAdjustmentService.CreateWallet(entity);
+			await _walletAdjustmentService.CreateWalletAsync(entity);
 
 			return Ok(entity);
 		}

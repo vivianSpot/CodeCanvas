@@ -29,7 +29,7 @@ namespace CodeCanvas.HostedServices
 		{
 			_logger.LogInformation("UpdateRatesHostedService running.");
 
-			_timer = new Timer(UpdateRates, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+			_timer = new Timer(UpdateRates, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
 
 			return Task.CompletedTask;
 		}
