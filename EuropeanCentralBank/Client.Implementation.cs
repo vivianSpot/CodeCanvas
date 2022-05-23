@@ -24,10 +24,19 @@ namespace EuropeanCentralBank
 			var ecbResponse = await _client.GetAsync(_settings.RatesEndpoint);
 
 			if (!ecbResponse.IsSuccessStatusCode) 
-				throw new Exception("Unable to get the rates from ECB.");
+				throw new Exception("Unable to retrieve rates from ECB.");
 
 			// 2) parse response
-			XDocument xml = XDocument.Parse(ecbResponse.Content.ReadAsStringAsync().Result);
+			XDocument xml;
+
+			try
+			{
+				xml = XDocument.Parse(ecbResponse.Content.ReadAsStringAsync().Result);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Unable to parse ECB response.", ex);
+			}
 
 			// 3) create RatesResponse
 			var ecbRateDate = (DateTime?)xml.Descendants()?.SingleOrDefault(x => x.Attribute("time") != null)?.Attribute("time");
